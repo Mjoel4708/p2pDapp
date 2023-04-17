@@ -27,7 +27,7 @@ function LenderPage() {
     };
 
     fetchLoans();
-  }, []);
+  }, [loans]);
 
   return (
     <>

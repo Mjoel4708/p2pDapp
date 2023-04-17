@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-
+import { ethers } from "ethers";
 
 const AdminPanel = ({ contract, account }) => {
   const [newLender, setNewLender] = useState("");
   const [newAdmin, setNewAdmin] = useState("");
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  provider.send("eth_requestAccounts", []);
 
   const handleAddLender = async () => {
+    const tx = await contract.populateTransaction.addApprovedLender(newLender);
+    const signer = await provider.getSigner();
+    const signedTx = await signer.sendTransaction(tx);
+    console.log(signedTx);
     await contract.addApprovedLender(newLender);
+
     setNewLender("");
   };
 

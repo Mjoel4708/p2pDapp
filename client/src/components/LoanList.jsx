@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const LoanList = ({ loans }) => {
   return (
@@ -20,21 +20,19 @@ const LoanList = ({ loans }) => {
             <tr>
               <td colSpan="5">No loans found.</td>
             </tr>
-            )
-          }
-          {loans.map((loan) => (
-            <tr key={loan.id}>
-              <td>
-                <Link to={`/loans/${loan.id}`}>
-                  {loan.borrower}
-                </Link>
-              </td>
-              <td>{loan.amount} ETH</td>
-              <td>{loan.interestRate}%</td>
-              <td>{loan.duration}</td>
-              <td>{loan.collateralProvided ? 'Yes' : 'No'}</td>
-            </tr>
-          ))}
+          )}
+          {Array.isArray(loans) &&
+            loans.map((loan) => (
+              <tr key={loan.id}>
+                <td>
+                  <Link to={`/loans/${loan.id}`}>{loan.borrower}</Link>
+                </td>
+                <td>{loan.amount} ETH</td>
+                <td>{loan.interestRate}%</td>
+                <td>{loan.duration}</td>
+                <td>{loan.collateralProvided ? "Yes" : "No"}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

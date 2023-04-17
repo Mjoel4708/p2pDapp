@@ -14,13 +14,12 @@ function Admin() {
   const account = provider.getSigner().getAddress();
 
   const isAdmin = async () => {
-    const isAuthorized = await contract.methods.admins(account).call();
+    const isAuthorized = await contract.admins(account).call();
     return isAuthorized;
   };
 
   return (
     <div>
-      <h2>Admin Panel</h2>
       {isAdmin() ? (
         <AdminPanel contract={contract} account={account} />
       ) : (

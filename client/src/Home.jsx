@@ -39,7 +39,13 @@ const HomePage = () => {
       console.error(error);
     }
   }
-
+  const loansAvailable = useMemo(async () => {
+    if (!lendingContract) return [];
+    const loanCount = await lendingContract.loansLength();
+    return Promise.all(
+      Array.from({ length: loanCount }, (_, i) => lendingContract.loans(i))
+    );
+  }, [lendingContract]);
   useEffect(() => {
     const init = async () => {
       if (window.ethereum) {
@@ -50,7 +56,8 @@ const HomePage = () => {
           setProvider(provider);
           setIsConnected(true);
           const accounts = await provider.listAccounts();
-          const loanCount = await lendingContract.loans.length();
+          console.log(accounts);
+          const loanCount = await loansAvailable.count();
 
           setAccounts(accounts);
           setLendingContract(lendingContract);
@@ -71,6 +78,11 @@ const HomePage = () => {
       Array.from({ length: loanCount }, (_, i) => lendingContract.loans(i))
     );
   }, [loanCount, lendingContract]);
+
+  if (!isConnected) {
+    <ConnectButton />;
+  }
+
 
   return (
     <>

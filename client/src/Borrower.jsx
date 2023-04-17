@@ -34,20 +34,20 @@ function BorrowerPage() {
         setContract(contract);
         const borrowerAddress = await provider.getSigner().getAddress();
         setAccount(borrowerAddress);
-        console.log(contract.getBorrowerLoans(borrowerAddress));
         const borrowerLoanIds = await contract
           .getBorrowerLoans(borrowerAddress)
           .then((result) => {
             return result;
           })
           .catch((error) => {
-            console.log(error);
+            console.log("Error retrieving borrower loans:", error.message);
+            return [];
           });
 
-        if (!borrowerLoanIds) {
-          setLoans([]);
-          setIsLoading(false);
-          return;
+        if (borrowerLoanIds.length === 0) {
+          console.log("No loans found for borrower:", borrowerAddress);
+        } else {
+          console.log("Borrower loan IDs:", borrowerLoanIds);
         }
 
         const borrowerLoans = await Promise.all(
@@ -90,7 +90,11 @@ function BorrowerPage() {
           ) : (
             <div className="container">
               {loans.length}
-              <BorrowerDashboard contract={contract} account={account} loans={loans} />
+              <BorrowerDashboard
+                contract={contract}
+                account={account}
+                loans={loans}
+              />
             </div>
           )}
         </>
